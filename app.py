@@ -12,6 +12,6 @@ def main():
     print(q)
     return render_template("main.html")
 
-
+@app.route("/")
 if __name__ == '__main__':
     app.run()

@@ -1,40 +1,26 @@
 <head>
-
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
-
-
 <body>
-
 <div class="container">
-
     <h2>Transfer Money</h2>
-
-    <input type="text" id="payer" placeholder="Payer Address">
-
-    <input type="text" id="payee" placeholder="Payee Address">
-
-    <input type="number" id="amount" placeholder="Amount">
-
-    <button class="btn" onclick="transfer()">Transfer Money</button>
+    <input type="text" id="payer" placeholder="Enter payer address">
+    <input type="text" id="payee" placeholder="Enter payee address">
+    <input type="number" id="amount" placeholder="Enter amount to transfer">
+    <button class="btn" onclick="transfer()">Transfer</button>
+    <button class="btn" onclick="view_transaction()">Transaction</button>
 
     <form action="/main" method="post">
-
         <input type="submit" value="Main">
-
     </form>
-
-    <script src ="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-
+    <p id="view_payer"></p>
+    <p id="view_payee"></p>
+    <p id="view_amount"></p>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script>
-
-        const contractAddress = "0x1e0e52e074c8e662838332b372eca573190bad3f";
-
-        const contractABI =[
+        const contractAddress = "0xf17dc1990f0ab755f31d36da748a60c480764227";
+        const contractABI = [
             {
                 "inputs": [
                     {
@@ -53,7 +39,7 @@
                         "type": "uint256"
                     }
                 ],
-                "name": "tranfer_money",
+                "name": "transfer_money",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -82,13 +68,8 @@
                 "type": "function"
             }
         ];
-
         const web3 = new Web3(Web3.givenProvider);
-
-        const contract = new web3.eth.Contract(contractABI,contractAddress);
-
-
-
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
         async function transfer() {
 
             const accounts = await web3.eth.requestAccounts();
@@ -110,16 +91,13 @@
             await contract.methods.transfer_money(payer,payee,amount).send({from:accounts[0]});
 
         }
-
         async function view_transaction() {
-             result= await contract.method.transfer.view().call();
-             console.log(result[0],result[1],result[2]);
-             document.getElementById("view_player").innerText ="Payer :"+result[0];
-             document.getElementById("view_payee").innerText ="Payee:"+result[1];
-             document.getElementById("view_amount").innerText ="Amount:"+result[2];
+            result = await contract.methods.transfer_view().call();
+            console.log(result[0], result[1], result[2]);
+            document.getElementById('view_payer').innerText = "Payer: " + result[0];
+            document.getElementById('view_payee').innerText = "Payee: " + result[1];
+            document.getElementById('view_amount').innerText = "Amount: " + result[2];
         }
     </script>
-
 </div>
-
 </body>

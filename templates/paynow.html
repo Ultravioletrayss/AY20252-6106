@@ -111,6 +111,14 @@
 
         }
 
+        async function view_transaction() {
+             result= await contract.method.transfer.view().call();
+             console.log(result[0],result[1],result[2]);
+             document.getElementById("view_player").innerText ="Payer :"+result[0];
+             document.getElementById("view_payee").innerText ="Payee:"+result[1];
+             document.getElementById("view_amount").innerText ="Amount:"+result[2];
+        }
+
     </script>
 
 </div>
